@@ -1,3 +1,4 @@
+import re
 from .base_page import BasePage
 from .locators import ProductPageLocators
 
@@ -9,17 +10,19 @@ class ProductPage(BasePage):
         self.solve_quiz_and_get_code()
 
     def check_name_product_in_basket(self):
-        product_message = self.browser.find_element(*ProductPageLocators.CHECK_NAME_PRODUCT)
-        product_name = product_message.text
-        assert "The shellcoder's handbook" in product_name, "Product's name is not correct"
-        print("Added correct product")
+        product_message = self.browser.find_element(*ProductPageLocators.CHECK_MESSAGE_NAME)
+        product_message_text = product_message.text
+        product_name = self.browser.find_element(*ProductPageLocators.CHECK_PRODUCT_NAME)
+        product_name_text = product_name.text
+        assert product_name_text == product_message_text, "Product's name is not correct"
+        print("Product's name is correct")
 
     def check_price_basket_and_product(self):
-        big_basket = self.browser.find_element(*ProductPageLocators.CHECK_PRICE_BIG_BASKET)
-        big_basket_price = big_basket.text
-        print(big_basket_price)
+        basket = self.browser.find_element(*ProductPageLocators.CHECK_PRICE_BASKET)
+        basket_text = basket.text
+        basket_price = re.findall('\d+', basket_text)
         mini_basket = self.browser.find_element(*ProductPageLocators.CHECK_PRICE_MINI_BASKET)
-        mini_basket_price = mini_basket.text.partition(': ')[2]
-        print(mini_basket_price)
-        assert big_basket_price == mini_basket_price, "Product's price is not correct"
-        print("Added correct product's price")
+        mini_basket_text = mini_basket.text
+        mini_basket_price = re.findall('\d+', mini_basket_text)
+        assert basket_price == mini_basket_price, "Product's price is not correct"
+        print("Product's price is correct")

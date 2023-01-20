@@ -13,5 +13,5 @@ class TestProductPage():
         product.add_product_to_basket()
         product.check_name_product_in_basket()
         product.check_price_basket_and_product()
-        # time.sleep(600)
+        # time.sleep(60)
 
